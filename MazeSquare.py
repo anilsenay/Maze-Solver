@@ -1,7 +1,7 @@
 class MazeSquare:
   def __init__(self, x, y, walls, squareType):
-    self.x = x
-    self.y = y
+    self.x = int(x)
+    self.y = int(y)
     self.squareType = squareType
     self.hasNorthWall = walls.find("N") != -1
     self.hasSouthWall = walls.find("S") != -1

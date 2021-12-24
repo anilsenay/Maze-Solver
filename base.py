@@ -6,11 +6,12 @@ mazeArray, startNode = createMaze()
 root = createTree(mazeArray, startNode) 
 
 def bfs(root):
+    global frontier 
     frontier = []
+    global explored
     explored = []
     cost = 0
     frontier.append(root)
-    i = 0
     while True:
         if (len(frontier) == 0):
             return "Error! Frontier is empty."
@@ -21,15 +22,17 @@ def bfs(root):
         cost = cost + node.cost
         for child in node.children:
             if (child.isGoal):
-                
-                print(child)
                 cost = cost + child.cost
+                # explored.append(child.square) should not be added
                 return cost
             if (child.square in explored):
                 continue
             frontier.append(child)
             
-        i = i + 1
 
 result = bfs(root)
-# print(result)
+print(result)
+for i in range(len(explored)):
+    print(explored[i])
+
+# print(frontier)

@@ -177,6 +177,37 @@ def greedyBestFirstSearch(root, mazeArray, goals):
         for node in row:
             print(node, node.cityBlockDistance)
 
+def greedyBestFirstSearch(root, mazeArray, goals):
+    calculateCityBlockDistances(mazeArray, goals)
+    global explored
+    explored = []
+    global frontier 
+    frontier = []
+
+    for row in mazeArray:
+        for node in row:
+            print(node, node.cityBlockDistance)
+            
+    pushToFrontier(root)
+    while True:
+        if (len(frontier) == 0):
+            return "Error! Frontier is empty."
+        
+        frontier.sort(key = lambda x: x.cost)
+        node = popFromFrontier()
+        print(node.square)
+        explored.append(node.square)
+        if (node.isGoal):
+            return node
+        for child in node.children:
+            if (child.square in explored):
+                continue
+            pushToFrontier(child)
+
+greedyBestFirstSearch(root, mazeArray, goals)
+
+
+
 ## A* HEURISTIC SEARCH ##
 
 def aHeuristicSearch(root, mazeArray, goals):

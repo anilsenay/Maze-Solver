@@ -133,3 +133,51 @@ def iterativeDeepening(root, limit):
     print(result)
 
 # iterativeDeepening(root, 30)
+
+## UNIFORM COST SEARCH ##
+
+def ucs(root):
+    global frontier 
+    frontier = []
+    global explored
+    explored = []
+    cost = 0
+    frontier.append(root)
+
+    while frontier:
+
+        # Frontier in en küçük cost'a sahip olan node 'unu pop ediyoruz.
+        # Sort edip frontier'ın ilk elemanını alıyoruz. (Priority Queue minumum cost) 
+        frontier.sort(key = lambda x: x.cost) 
+        node = frontier.pop()
+
+        # Visited nodeları ekliyoruz.
+        if node not in explored:
+            explored.append(node)
+
+        cost = cost + node.cost
+
+        # Goal node ise return ediyoruz.
+        if node.isGoal:
+            return node
+         
+        # Frontiner'i doldurmak için node un children larında dolaşıyoruz.
+        for child in node.children:
+            # Burada her child in root ile olan uzaklığını 
+            # bulup frontier'a (priority queue) ekleme yapıyoruz. 
+            if (child.isGoal):
+                # Burada ayrıca goal node un cost u ile 
+                # frontier daki minumum costu karşlaştırmamız gerekiyor.
+                # eğer goal state in costu frontier daki minumum costtan büyükse 
+                # frontierdaki minumum costu olan node ile işleme devam edilmeli.
+                cost = cost + child.cost
+                return cost
+            if (child.square in explored):
+                continue
+
+
+ucs(root)
+
+
+
+

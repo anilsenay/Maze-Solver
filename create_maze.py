@@ -1,5 +1,4 @@
 from MazeSquare import MazeSquare
-from create_tree import createTree
 
 def createMaze():
   file1 = open('maze_1', 'r')
@@ -10,6 +9,7 @@ def createMaze():
 
   mazeArray = []
   startPoint = None
+  goals = []
 
   for x in range(mazeSize[0]):
     mazeRow = []
@@ -21,7 +21,19 @@ def createMaze():
       mazeRow.append(squareObj)
       if(squareInfo[2] == "START"):
         startPoint = squareObj
+      if(squareInfo[2] == "GOAL"):
+        goals.append(squareObj)
 
     mazeArray.append(mazeRow)
 
-  return [mazeArray, startPoint]
+  return [mazeArray, startPoint, goals]
+
+def calculateCityBlockDistances(mazeArray, goals):
+  for row in mazeArray:
+    for node in row:
+      closestGoalDistance = float("inf")
+      for goal in goals:
+        distance = abs(node.x - goal.x) + abs(node.y - goal.y)
+        if(distance < closestGoalDistance):
+          closestGoalDistance = distance
+      node.cityBlockDistance = closestGoalDistance

@@ -1,14 +1,27 @@
-from create_maze import createMaze
+from create_maze import calculateCityBlockDistances, createMaze
 from create_tree import createTree
 
 
-mazeArray, startNode = createMaze()
+mazeArray, startNode, goals = createMaze()
 root = createTree(mazeArray, startNode) 
 
-frontier = []
+frontier, frontierSize, maxFrontierSize = ([], 0, 0)
 explored = []
+expanded = [] # TODO
 cost = 0
 depth = 0
+
+def pushToFrontier(node):
+    global maxFrontierSize
+    global frontierSize
+    frontierSize = frontierSize + 1
+    frontier.append(node)
+    if(frontierSize > maxFrontierSize): maxFrontierSize = frontierSize
+
+def popFromFrontier():
+    global frontierSize
+    frontierSize = frontierSize - 1
+    return frontier.pop(0)
 
 ## BREADTH FIRST SEARCH ##
 
@@ -18,11 +31,11 @@ def bfs(root):
     global explored
     explored = []
     cost = 0
-    frontier.append(root)
+    pushToFrontier(root)
     while True:
         if (len(frontier) == 0):
             return "Error! Frontier is empty."
-        node = frontier.pop(0)
+        node = popFromFrontier()
         
         # print(node.square)
         explored.append(node.square)
@@ -34,7 +47,7 @@ def bfs(root):
                 return cost
             if (child.square in explored):
                 continue
-            frontier.append(child)
+            pushToFrontier(child)
             
 
 # result = bfs(root)
@@ -46,7 +59,7 @@ def bfs(root):
 def dfs():
     global depth
     depth = 0
-    frontier.append(root)
+    pushToFrontier(root)
     goal = recursiveDfs(root)
     print(goal)
     print(len(explored))
@@ -54,11 +67,7 @@ def dfs():
 
 def recursiveDfs(node):
     global depth   
-
-    print(node)
-    print("Count: ",len(frontier))
-    print("depth: ",depth, "\n")
-    frontier.pop()
+    popFromFrontier()
     explored.append(node.square)
 
     global cost
@@ -67,7 +76,7 @@ def recursiveDfs(node):
     if(node.isGoal):
         return node
     for child in node.children:
-        frontier.append(child)
+        pushToFrontier(child)
 
     depth = depth + 1
 
@@ -84,7 +93,7 @@ def recursiveDfs(node):
 def dls(root, limit):
     global depth
     depth = 0
-    frontier.append(root)
+    pushToFrontier(root)
     goal = recursiveDls(root, limit)
     print(goal)
     print(len(explored))
@@ -96,10 +105,7 @@ def recursiveDls(node, limit):
     if(depth > limit):
         return
 
-    print(node)
-    print("Count: ",len(frontier))
-    print("depth: ",depth, "\n")
-    frontier.pop()
+    popFromFrontier()
     explored.append(node.square)
 
     global cost
@@ -108,7 +114,7 @@ def recursiveDls(node, limit):
     if(node.isGoal):
         return node
     for child in node.children:
-        frontier.append(child)
+        pushToFrontier(child)
         print("child:", child)
 
     depth = depth + 1
@@ -119,7 +125,7 @@ def recursiveDls(node, limit):
             return result
     depth = depth - 1
 
-# dls(root, 2)
+# dls(root, 5)
 
 ## ITERATIVE DEEPENING SEARCH ##
 
@@ -133,3 +139,20 @@ def iterativeDeepening(root, limit):
     print(result)
 
 # iterativeDeepening(root, 30)
+
+### TODO ###
+## GREEDY BEST FIRST SEARCH ##
+
+def greedyBestFirstSearch(root, mazeArray, goals):
+    calculateCityBlockDistances(mazeArray, goals)
+    for row in mazeArray:
+        for node in row:
+            print(node, node.cityBlockDistance)
+
+## A* HEURISTIC SEARCH ##
+
+def aHeuristicSearch(root, mazeArray, goals):
+    calculateCityBlockDistances(mazeArray, goals)
+    for row in mazeArray:
+        for node in row:
+            print(node, node.cityBlockDistance)

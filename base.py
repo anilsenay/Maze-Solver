@@ -140,6 +140,34 @@ def iterativeDeepening(root, limit):
 
 # iterativeDeepening(root, 30)
 
+## UNIFORM COST SEARCH ##
+
+def ucs(root):
+    global frontier 
+    frontier = []
+    global explored
+    explored = []
+    root.costSoFar = 0
+    frontier.append(root)
+
+    while True:
+        frontier.sort(key = lambda x: x.costSoFar, reverse=True) 
+        node = frontier.pop()
+        print(node, node.costSoFar)
+
+        if node.isGoal:
+            return node
+         
+        for child in node.children:
+            child.costSoFar = node.costSoFar + child.cost
+            frontier.append(child)
+
+goal = ucs(root)
+print(goal)
+
+
+
+
 ### TODO ###
 ## GREEDY BEST FIRST SEARCH ##
 

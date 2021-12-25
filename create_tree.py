@@ -34,7 +34,7 @@ def createNodeWithChilds(node: MazeSquare):
 
   if(node.squareType == "GOAL"):
     stack.pop()
-    return Node(node, COST[node.squareType], False, nodeChildren)
+    return Node(node, COST[node.squareType], True, nodeChildren)
 
   if(not(node.hasEastWall)):
     if(not(mazeArray[(node.x - 1)][(node.y - 1) + 1] in stack)):

@@ -13,27 +13,29 @@ depth = 0
 ## BREADTH FIRST SEARCH ##
 
 def bfs(root):
+    global frontier 
+    frontier = []
+    global explored
+    explored = []
+    cost = 0
     frontier.append(root)
-    i = 0
     while True:
         if (len(frontier) == 0):
             return "Error! Frontier is empty."
         node = frontier.pop(0)
         
-        print(node.square)
+        # print(node.square)
         explored.append(node.square)
         cost = cost + node.cost
         for child in node.children:
             if (child.isGoal):
-                
-                print(child)
                 cost = cost + child.cost
+                # explored.append(child.square) should not be added
                 return cost
             if (child.square in explored):
                 continue
             frontier.append(child)
             
-        i = i + 1
 
 # result = bfs(root)
 # print(result)

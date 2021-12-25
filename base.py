@@ -148,11 +148,11 @@ def ucs(root):
     global explored
     explored = []
     root.costSoFar = 0
-    frontier.append(root)
+    pushToFrontier(root)
 
     while True:
-        frontier.sort(key = lambda x: x.costSoFar, reverse=True) 
-        node = frontier.pop()
+        frontier.sort(key = lambda x: x.costSoFar) 
+        node = popFromFrontier()
         print(node, node.costSoFar)
 
         if node.isGoal:
@@ -160,10 +160,10 @@ def ucs(root):
          
         for child in node.children:
             child.costSoFar = node.costSoFar + child.cost
-            frontier.append(child)
+            pushToFrontier(child)
 
-goal = ucs(root)
-print(goal)
+# goal = ucs(root)
+# print(goal)
 
 
 
@@ -183,17 +183,13 @@ def greedyBestFirstSearch(root, mazeArray, goals):
     explored = []
     global frontier 
     frontier = []
-
-    for row in mazeArray:
-        for node in row:
-            print(node, node.cityBlockDistance)
-            
+    
     pushToFrontier(root)
     while True:
         if (len(frontier) == 0):
             return "Error! Frontier is empty."
         
-        frontier.sort(key = lambda x: x.cost)
+        frontier.sort(key = lambda x: x.square.cityBlockDistance)
         node = popFromFrontier()
         print(node.square)
         explored.append(node.square)

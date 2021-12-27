@@ -80,10 +80,16 @@ def greedyStrategie():
     frontier.sort(key = lambda x: x.square.cityBlockDistance)
     return popFromFrontier(0)
 
-# calculateCityBlockDistances(mazeArray, goals)
-# generalSearch(root, dfsStrategie, 5)
-generalSearch(root, dfsStrategie)
+## GREEDY BEST FIRST STRATEGIE ##
+def aStarStrategie():
+    frontier.sort(key = lambda x: x.square.cityBlockDistance + x.costSoFar)
+    return popFromFrontier(0)
 
+calculateCityBlockDistances(mazeArray, goals)
+# generalSearch(root, dfsStrategie, 5)
+generalSearch(root, aStarStrategie)
+# for i in range(20):
+#     generalSearch(root, dfsStrategie, i)
 
 ## BREADTH FIRST SEARCH ##
 

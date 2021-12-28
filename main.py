@@ -61,7 +61,7 @@ def greedyStrategy():
     frontier.sort(key = lambda x: x.square.cityBlockDistance)
     return popFromFrontier(0)
 
-## GREEDY BEST FIRST STRATEGY ##
+## A* STRATEGY ##
 def aStarStrategy():
     frontier.sort(key = lambda x: x.square.cityBlockDistance + x.costSoFar)
     return popFromFrontier(0)

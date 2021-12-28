@@ -40,29 +40,29 @@ def generalSearch(root, strategie, limit = None):
         for child in node.children:
             pushToFrontier(child)
 
-## BFS STRATEGIE ##
-def bfsStrategie():
+## BFS STRATEGY ##
+def bfsStrategy():
     return popFromFrontier(0)
 
-## DFS STRATEGIE ##
-def dfsStrategie():
+## DFS STRATEGY ##
+def dfsStrategy():
     index = -1
     while (frontierSize > abs(index) and frontier[-1].depth == frontier[index-1].depth):
         index = index - 1
     return popFromFrontier(index)
 
-## UCS STRATEGIE ##
-def ucsStrategie():
+## UCS STRATEGY ##
+def ucsStrategy():
     frontier.sort(key = lambda x: x.costSoFar) 
     return popFromFrontier(0)
 
-## GREEDY BEST FIRST STRATEGIE ##
-def greedyStrategie():
+## GREEDY BEST FIRST STRATEGY ##
+def greedyStrategy():
     frontier.sort(key = lambda x: x.square.cityBlockDistance)
     return popFromFrontier(0)
 
-## GREEDY BEST FIRST STRATEGIE ##
-def aStarStrategie():
+## GREEDY BEST FIRST STRATEGY ##
+def aStarStrategy():
     frontier.sort(key = lambda x: x.square.cityBlockDistance + x.costSoFar)
     return popFromFrontier(0)
 
@@ -89,28 +89,28 @@ def main():
     mazeArray, startNode, goals = createMaze(mazeName)
     root, maxDepth = createTree(mazeArray, startNode) 
 
-    selection = askStrategie()
+    selection = askStrategy()
 
     if(selection == 1):
-        generalSearch(root, dfsStrategie)
+        generalSearch(root, dfsStrategy)
     elif(selection == 2):
-        generalSearch(root, bfsStrategie)
+        generalSearch(root, bfsStrategy)
     elif(selection == 3):
         for i in range(maxDepth):
-            goal = generalSearch(root, dfsStrategie, i)
+            goal = generalSearch(root, dfsStrategy, i)
             if(goal != None): break
     elif(selection == 4):
-        generalSearch(root, ucsStrategie)
+        generalSearch(root, ucsStrategy)
     elif(selection == 5):
         calculateCityBlockDistances(mazeArray, goals)
-        generalSearch(root, greedyStrategie)
+        generalSearch(root, greedyStrategy)
     elif(selection == 6):
         calculateCityBlockDistances(mazeArray, goals)
-        generalSearch(root, aStarStrategie)
+        generalSearch(root, aStarStrategy)
 
     printResults()
 
-def askStrategie():
+def askStrategy():
     print("Please select a search strategie")
     print("1 - Depth First Search")
     print("2 - Breadth First Search")
@@ -122,7 +122,7 @@ def askStrategie():
     selection = int(input("Type your selection number: "))
     while(not(selection == 1 or selection == 2 or selection == 3 or selection == 4 or selection == 5 or selection == 6)):
         print("Please type a valid number\n")
-        selection = askStrategie()
+        selection = askStrategy()
     return selection
 
 ## PRINT RESULTS ##

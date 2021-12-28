@@ -22,19 +22,20 @@ COST = {
 mazeArray = []
 stack = []
 depth = -1
+maxDepth = 0
 
 def createTree(nodeList, startNode: MazeSquare):
   global mazeArray
   mazeArray = nodeList
   root = createNodeWithChilds(startNode, -1, 0)
-  # print(root)
-  return root
+  return [root, maxDepth]
 
 def createNodeWithChilds(node: MazeSquare, rootDepth, costSoFar): 
-  # print(node)
+  global maxDepth
   stack.append(node)
   nodeChildren = []
   nodeDepth = rootDepth + 1
+  if(nodeDepth > maxDepth): maxDepth = nodeDepth
   nodeCostSoFar = costSoFar + COST[node.squareType]
 
   if(node.squareType == "GOAL"):

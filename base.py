@@ -1,12 +1,8 @@
 from create_maze import calculateCityBlockDistances, createMaze
 from create_tree import createTree
 
-mazeArray, startNode, goals = createMaze()
-root = createTree(mazeArray, startNode) 
-
 frontier, frontierSize, maxFrontierSize = ([], 0, 0)
 explored = []
-numberOfExpanded = 0 # TODO
 depth = 0
 
 def pushToFrontier(node):
@@ -21,9 +17,8 @@ def popFromFrontier(location = -1):
     return frontier.pop(location)
 
 ## GENERAL SEARCH ##
-
 def generalSearch(root, strategie, limit = None):
-    global frontier, explored, numberOfExpanded
+    global frontier, explored
     frontier = []
     explored = []
     pushToFrontier(root)
@@ -34,7 +29,6 @@ def generalSearch(root, strategie, limit = None):
         node = strategie()
         if(node == None):
             return None
-        print("\n", node)
         
         explored.append(node)
 
@@ -43,26 +37,8 @@ def generalSearch(root, strategie, limit = None):
 
         if(limit != None and node.depth + 1 > limit): continue
 
-        if(len(node.children) != 0):
-            numberOfExpanded = numberOfExpanded + 1
-
         for child in node.children:
             pushToFrontier(child)
-
-def findSolution():
-    index = -1
-    lastIndex = -len(explored)
-    solutionPath = [explored[index]]
-    cost = explored[index].cost
-    while(index >= lastIndex):
-        if(solutionPath[0] in explored[index].children):
-            solutionPath.insert(0, explored[index])
-            cost = cost + explored[index].cost
-        index = index - 1
-    for i in solutionPath:
-        print(i)
-    print("cost: ", cost)
-
 
 ## BFS STRATEGIE ##
 def bfsStrategie():
@@ -74,10 +50,6 @@ def dfsStrategie():
     while (frontierSize > abs(index) and frontier[-1].depth == frontier[index-1].depth):
         index = index - 1
     return popFromFrontier(index)
-
-## ITERATIVE DEEPENING STRATEGIE ##
-def idsStrategie():
-    return popFromFrontier()
 
 ## UCS STRATEGIE ##
 def ucsStrategie():
@@ -94,17 +66,72 @@ def aStarStrategie():
     frontier.sort(key = lambda x: x.square.cityBlockDistance + x.costSoFar)
     return popFromFrontier(0)
 
-calculateCityBlockDistances(mazeArray, goals)
-# generalSearch(root, dfsStrategie, 5)
-generalSearch(root, dfsStrategie)
-print("----------------------------")
-findSolution()
+def findSolution():
+    index = -1
+    lastIndex = -len(explored)
+    solutionPath = [explored[index]]
+    cost = explored[index].cost
+    while(index >= lastIndex):
+        if(solutionPath[0] in explored[index].children):
+            solutionPath.insert(0, explored[index])
+            cost = cost + explored[index].cost
+        index = index - 1
+    solutionPathString = ""
+    for node in solutionPath:
+        solutionPathString = solutionPathString + "(" + str(node.square.x) + "," + str(node.square.y) + ") - "
+    solutionPathString = solutionPathString[:-2]
+    return [cost, solutionPathString]
 
-## TODO: reset iterative deepening
-# for i in range(20):
-#     generalSearch(root, dfsStrategie, i)
+def main():
+    print("Welcome to Maze Solver")
+    mazeName = input("Please enter the maze file [maze_1]: ") or "maze_1"
+    
+    mazeArray, startNode, goals = createMaze(mazeName)
+    root, maxDepth = createTree(mazeArray, startNode) 
+
+    selection = askStrategie()
+
+    if(selection == 1):
+        generalSearch(root, dfsStrategie)
+    elif(selection == 2):
+        generalSearch(root, bfsStrategie)
+    elif(selection == 3):
+        for i in range(maxDepth):
+            goal = generalSearch(root, dfsStrategie, i)
+            if(goal != None): break
+    elif(selection == 4):
+        generalSearch(root, ucsStrategie)
+    elif(selection == 5):
+        calculateCityBlockDistances(mazeArray, goals)
+        generalSearch(root, greedyStrategie)
+    elif(selection == 6):
+        calculateCityBlockDistances(mazeArray, goals)
+        generalSearch(root, aStarStrategie)
+
+    printResults()
+
+def askStrategie():
+    print("Please select a search strategie")
+    print("1 - Depth First Search")
+    print("2 - Breadth First Search")
+    print("3 - Iterative Deepening")
+    print("4 - Uniform Cost Search")
+    print("5 - Greedy Best First Search")
+    print("6 - A* Heuristic Search")
+
+    selection = int(input("Type your selection number: "))
+    while(not(selection == 1 or selection == 2 or selection == 3 or selection == 4 or selection == 5 or selection == 6)):
+        print("Please type a valid number\n")
+        selection = askStrategie()
+    return selection
 
 ## PRINT RESULTS ##
-print("The maximum size of the explored set during the search.: " + str(len(explored)))
-print("Number of expanded nodes: " + str(numberOfExpanded))
-print("The maximum size of the frontier: " + str(maxFrontierSize))
+def printResults():
+    cost, solutionPath = findSolution()
+    print("The cost of the solution found: " + str(cost))
+    print("Number of expanded nodes: " +  str(len(explored)))
+    print("The maximum size of the frontier: " + str(maxFrontierSize))
+    print("The maximum size of the explored set during the search: " + str(len(explored)))
+    print("Solution Path: " + str(solutionPath))
+    
+main()

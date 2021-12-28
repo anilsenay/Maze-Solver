@@ -1,7 +1,12 @@
 from MazeSquare import MazeSquare
+import sys
 
-def createMaze():
-  file1 = open('maze_1', 'r')
+def createMaze(fileName = "maze_1"):
+  try:
+    file1 = open(fileName, 'r')
+  except OSError:
+    print ("Could not open/read maze file:", fileName)
+    sys.exit()
   Lines = file1.readlines()
 
   mazeSize = Lines[-1].split()[0].split(",")

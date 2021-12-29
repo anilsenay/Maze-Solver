@@ -3,6 +3,7 @@ from create_tree import createTree
 
 frontier, frontierSize, maxFrontierSize = ([], 0, 0)
 explored = []
+numberOfExpanded = 0
 depth = 0
 
 def pushToFrontier(node):
@@ -18,7 +19,7 @@ def popFromFrontier(location = -1):
 
 ## GENERAL SEARCH ##
 def generalSearch(root, strategie, limit = None):
-    global frontier, explored
+    global frontier, explored, numberOfExpanded
     frontier = []
     explored = []
     pushToFrontier(root)
@@ -31,6 +32,7 @@ def generalSearch(root, strategie, limit = None):
             return None
         
         explored.append(node)
+        numberOfExpanded = numberOfExpanded + 1
 
         if node.isGoal:
             return node
@@ -129,7 +131,7 @@ def askStrategy():
 def printResults():
     cost, solutionPath = findSolution()
     print("The cost of the solution found: " + str(cost))
-    print("Number of expanded nodes: " +  str(len(explored)))
+    print("Number of expanded nodes: " +  str(numberOfExpanded))
     print("The maximum size of the frontier: " + str(maxFrontierSize))
     print("The maximum size of the explored set during the search: " + str(len(explored)))
     print("Solution Path: " + str(solutionPath))

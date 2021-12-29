@@ -4,7 +4,6 @@ from create_tree import createTree
 # Global variables for the search algorithm
 frontier, frontierSize, maxFrontierSize = ([], 0, 0)
 explored = []
-expanded = []
 numberOfExpanded = 0
 depth = 0
 
@@ -42,10 +41,7 @@ def generalSearch(root, strategy, limit = None):
         if(node == None):
             return None
 
-        if(node.square not in explored):
-            explored.append(node.square)
-        else: continue
-        expanded.append(node)
+        explored.append(node)
         numberOfExpanded = numberOfExpanded + 1
         
         # If a node is a goal node, return the node.
@@ -92,20 +88,20 @@ def aStarStrategy():
     frontier.sort(key = lambda x: x.square.cityBlockDistance + x.costSoFar)
     return popFromFrontier(0)
 
-## To find solution we trace expanded list in reverse order
+## To find solution we trace explored list in reverse order
 ## First we start from last index which has goal state
 ## And trace backward to find the node has goal state as child
 ## Then for each node we are looking for its parent
 ## Finally we have the solution path
 def findSolution():
     index = -1 ## Start index as -1 which is goal state's index
-    lastIndex = -len(expanded) ## Get first element's index of array from backward 
-    solutionPath = [expanded[index]]
-    cost = expanded[index].cost ## We also find cost of the solution path
+    lastIndex = -len(explored) ## Get first element's index of array from backward 
+    solutionPath = [explored[index]]
+    cost = explored[index].cost ## We also find cost of the solution path
     while(index >= lastIndex):
-        if(solutionPath[0] in expanded[index].children):
-            solutionPath.insert(0, expanded[index])
-            cost = cost + expanded[index].cost
+        if(solutionPath[0] in explored[index].children):
+            solutionPath.insert(0, explored[index])
+            cost = cost + explored[index].cost
         index = index - 1
     
     ## After getting solution path, we create a solution path string in format
@@ -137,7 +133,9 @@ def main():
     elif(selection == 3):
         for i in range(maxDepth):
             goal = generalSearch(root, dfsStrategy, i)
-            if(goal != None): break
+            if(goal != None): 
+                print("---------", str(i))
+                break
     elif(selection == 4):
         generalSearch(root, ucsStrategy)
     elif(selection == 5):

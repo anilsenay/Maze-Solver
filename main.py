@@ -3,6 +3,7 @@ from create_tree import createTree
 
 frontier, frontierSize, maxFrontierSize = ([], 0, 0)
 explored = []
+expanded = []
 numberOfExpanded = 0
 depth = 0
 
@@ -30,8 +31,11 @@ def generalSearch(root, strategie, limit = None):
         node = strategie()
         if(node == None):
             return None
-        
-        explored.append(node)
+
+        if(node.square not in explored):
+            explored.append(node.square)
+        else: continue
+        expanded.append(node)
         numberOfExpanded = numberOfExpanded + 1
 
         if node.isGoal:
@@ -70,13 +74,13 @@ def aStarStrategy():
 
 def findSolution():
     index = -1
-    lastIndex = -len(explored)
-    solutionPath = [explored[index]]
-    cost = explored[index].cost
+    lastIndex = -len(expanded)
+    solutionPath = [expanded[index]]
+    cost = expanded[index].cost
     while(index >= lastIndex):
-        if(solutionPath[0] in explored[index].children):
-            solutionPath.insert(0, explored[index])
-            cost = cost + explored[index].cost
+        if(solutionPath[0] in expanded[index].children):
+            solutionPath.insert(0, expanded[index])
+            cost = cost + expanded[index].cost
         index = index - 1
     solutionPathString = ""
     for node in solutionPath:
@@ -130,7 +134,7 @@ def askStrategy():
 ## PRINT RESULTS ##
 def printResults():
     cost, solutionPath = findSolution()
-    print("The cost of the solution found: " + str(cost))
+    print("\nThe cost of the solution found: " + str(cost))
     print("Number of expanded nodes: " +  str(numberOfExpanded))
     print("The maximum size of the frontier: " + str(maxFrontierSize))
     print("The maximum size of the explored set during the search: " + str(len(explored)))

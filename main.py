@@ -64,6 +64,9 @@ def bfsStrategy():
     return popFromFrontier(0)
 
 ## DFS STRATEGY ##
+# It finds first node of last pushed nodes in frontier and pops it
+# For example, if 3 nodes pushed at last time, it pops first of those
+# because we push children according to their priorities
 def dfsStrategy():
     index = -1
     while (frontierSize > abs(index) and frontier[-1].depth == frontier[index-1].depth):
@@ -89,20 +92,27 @@ def aStarStrategy():
     frontier.sort(key = lambda x: x.square.cityBlockDistance + x.costSoFar)
     return popFromFrontier(0)
 
+## To find solution we trace expanded list in reverse order
+## First we start from last index which has goal state
+## And trace backward to find the node has goal state as child
+## Then for each node we are looking for its parent
+## Finally we have the solution path
 def findSolution():
-    index = -1
-    lastIndex = -len(expanded)
+    index = -1 ## Start index as -1 which is goal state's index
+    lastIndex = -len(expanded) ## Get first element's index of array from backward 
     solutionPath = [expanded[index]]
-    cost = expanded[index].cost
+    cost = expanded[index].cost ## We also find cost of the solution path
     while(index >= lastIndex):
         if(solutionPath[0] in expanded[index].children):
             solutionPath.insert(0, expanded[index])
             cost = cost + expanded[index].cost
         index = index - 1
+    
+    ## After getting solution path, we create a solution path string in format
     solutionPathString = ""
     for node in solutionPath:
         solutionPathString = solutionPathString + "(" + str(node.square.x) + "," + str(node.square.y) + ") - "
-    solutionPathString = solutionPathString[:-2]
+    solutionPathString = solutionPathString[:-2] ## Remove last two character which is "- "
     return [cost, solutionPathString]
 
 # Main function

@@ -1,4 +1,5 @@
-class MazeSquare:
+# MazeSquare Class definition 
+class MazeSquare: 
   def __init__(self, x, y, walls, squareType):
     self.x = int(x)
     self.y = int(y)

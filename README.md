@@ -1,7 +1,7 @@
 # CSE4082 Project 2 - Artificial Intelligence for 2048 Game 
 
 ## Aim of the Project
-This project aims to implement 6 different uninformed and informed search strategies. These strategies include;
+This project aims to design and implement a maze solver for solving 2D mazes using graph search with the following strategies:
 1. Depth-First Search
 2. Breadth-First Search
 3. Iterative Deepening

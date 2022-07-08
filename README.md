@@ -1,4 +1,4 @@
-# CSE4082 Project 2 - Artificial Intelligence for 2048 Game 
+# CSE4082 Project 1 - Maze Solver Using Graph Search Strategies
 
 ## Aim of the Project
 This project aims to design and implement a maze solver for solving 2D mazes using graph search with the following strategies:
